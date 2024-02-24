@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { userModel } from "../model/user.model.js";
+import puppeteer from "puppeteer";
 
 export const login = async (req, res) => {
   try {
@@ -20,7 +21,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1m" }
+      { expiresIn: "1h" }
     );
     return res.status(200).send({ message: "Login Successfully", token });
   } catch (err) {
@@ -68,6 +69,29 @@ export const home = async (req, res) => {
   try {
     const user = req.user;
     return res.status(200).json({ message: "Welcome to home page", user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+export const generatePdf = async (req, res) => {
+  try {
+    // console.log(req.body.template.replace(/\n\s+/g, "\n"));
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Convert JSON data to HTML (format it as needed)
+    const htmlContent = req.body.template.replace(/\n\s+/g, "\n");
+
+    // Set content and render PDF
+    await page.setContent(htmlContent);
+    const pdf = await page.pdf({ path: "output.pdf", format: "A4" });
+    await browser.close();
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
+    // return res.status(200).json("PDF generated successfully");
+    return res.status(200).send(pdf);
   } catch (error) {
     console.log(error);
     res.status(500).send("Internal server error");
