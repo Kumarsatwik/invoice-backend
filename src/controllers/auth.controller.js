@@ -77,20 +77,14 @@ export const home = async (req, res) => {
 
 export const generatePdf = async (req, res) => {
   try {
-    // console.log(req.body.template.replace(/\n\s+/g, "\n"));
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
-    // Convert JSON data to HTML (format it as needed)
     const htmlContent = req.body.template.replace(/\n\s+/g, "\n");
-
-    // Set content and render PDF
     await page.setContent(htmlContent);
-    const pdf = await page.pdf({ path: "output.pdf", format: "A4" });
+    const pdf = await page.pdf({ format: "A4" });
     await browser.close();
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
-    // return res.status(200).json("PDF generated successfully");
+    res.setHeader("Content-Disposition", "inline; filename=invoice.pdf");
     return res.status(200).send(pdf);
   } catch (error) {
     console.log(error);
