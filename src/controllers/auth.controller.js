@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { userModel } from "../model/user.model.js";
 import puppeteer from "puppeteer";
+import { exec } from "child_process";
 
 export const login = async (req, res) => {
   try {
@@ -77,6 +78,12 @@ export const home = async (req, res) => {
 
 export const generatePdf = async (req, res) => {
   try {
+    exec("npx puppeteer browsers install", (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing command: ${error}`);
+        return;
+      }
+    });
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     const htmlContent = req.body.template.replace(/\n\s+/g, "\n");
