@@ -1,50 +1,66 @@
-Features:
 
-# OTP-based signup and login:
+# Invoice Generator
 
-- Verifies user identity through a unique, temporary code sent via email.
 
-# JWT token authentication:
 
-- Generates and validates tokens for secure API access, avoiding the need to store passwords on the server.
 
-# MongoDB storage:
+## Run Locally
 
-- Manages user data securely and efficiently in a popular NoSQL database.
+Clone the project
 
-## API Endpoints
+```bash
+  https://github.com/Kumarsatwik/invoice.git    (Frontend)
+  https://github.com/Kumarsatwik/invoice-backend.git   (Backend)
+```
+# server setup
 
-# Login
+  ```bash
+  cd backend
+```
+Install dependencies
 
-- http://localhost:5000/api/v1/login
-- body:{
-  "email":"kumarsatwik6@gmail.com",
-  "password":"test1234"
-  }
+```bash
+  npm install
+```
 
-# Signup
+Start the server
 
-- http://localhost:5000/api/v1/signup
-- body:{
-  "name":"kumar"
-  "email":"kumarsatwik6@gmail.com",
-  "password":"test1234"
-  }
+```bash
+  npm run start
+```
+# frontend
 
-# verify
+```bash
+  cd frontend
+```
 
-- http://localhost:5000/api/v1/verify
-- body:{
-  {
-  "email":"kumarsatwik6@gmail.com",
-  "otp":"697104"
-  }
-  }
+Install dependencies
 
-# home
+```bash
+  npm install
+```
 
-- http://localhost:5000/api/v1
-- headers:{
-  authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDVmYWFiMjA4YWRlY2FhY2Q0MGZmZCIsImVtYWlsIjoia3VtYXJzYXR3aWs2QGdtYWlsLmNvbSIsImlhdCI6MTcwODUyMjg2NSwiZXhwIjoxNzA4NTIyOTI1fQ.yxEYscYZWXpY0NeniC8bYQECO1kDGFzsFY1MejYDBDg"
-  }
-"# invoice-backend" 
+Start the server
+
+```bash
+  npm run dev
+```
+
+
+    
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+##### Frontend Requirement
+`VITE_SERVER_URL`
+
+##### Server Requirement
+- PORT
+- JWT_SECRET
+- MONGO_URI
+
+
+
+
+
