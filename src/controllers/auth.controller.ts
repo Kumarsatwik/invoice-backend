@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { userModel } from "../model/user.model.js";
+import { userModel } from "../model/user.model";
 import puppeteer from "puppeteer";
-import { exec } from "child_process";
+import { Request, Response } from "express";
 
-export const login = async (req, res) => {
+interface IGetUserAuthInfoRequest extends Request {
+  user: string; // Replace with the actual type of your user object
+}
+
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -21,7 +25,7 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
     return res.status(200).send({ message: "Login Successfully", token });
@@ -31,7 +35,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const signup = async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
   try {
     const { fullName, email, password, cpassword } = req.body;
 
@@ -66,19 +70,8 @@ export const signup = async (req, res) => {
   }
 };
 
-export const home = async (req, res) => {
+export const generatePdf = async (req: Request, res: Response) => {
   try {
-    const user = req.user;
-    return res.status(200).json({ message: "Welcome to home page", user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal server error");
-  }
-};
-
-export const generatePdf = async (req, res) => {
-  try {
- 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     const htmlContent = req.body.template.replace(/\n\s+/g, "\n");
